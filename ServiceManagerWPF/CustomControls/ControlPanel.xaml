@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="ServiceManagerWPF.ControlPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ServiceManagerWPF"
+             mc:Ignorable="d">
+    <Grid>
+        <StackPanel Orientation="Horizontal">
+            <Button Margin="10 0 0 0"
+                    Width="40"
+                    Height="40">
+                <StackPanel>
+                    <Image Source="/Images/Start_Available.png"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10 0 0 0"
+                    Width="40"
+                    Height="40">
+                <StackPanel>
+                    <Image Source="/Images/Stop_Available.png"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10 0 0 0"
+                    Width="40"
+                    Height="40">
+                <StackPanel>
+                    <Image Source="/Images/Pause_Available.png"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10 0 0 0"
+                    Width="40"
+                    Height="40">
+                <StackPanel>
+                    <Image Source="/Images/Refresh_Available.png"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10 0 0 0"
+                    Width="40"
+                    Height="40">
+                <StackPanel>
+                    <Image Source="/Images/Config_Available.png"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

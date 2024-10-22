@@ -1,0 +1,43 @@
+﻿<Window x:Class="ServiceManagerWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ServiceManagerWPF"
+        mc:Ignorable="d"
+        FontFamily="Verdana"
+        FontSize="16"
+        Title="Tiny Service Manager" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition/>
+            <RowDefinition Height="20"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="2.5*"/>
+        </Grid.ColumnDefinitions>
+        
+        <!-- Control Panel -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan ="2">
+            <StackPanel Margin="10 0 10 10">
+                <Label Content="Group:"/>
+                <ComboBox Name="_groupsComboBox"
+                          Width ="200" Height="25"/>
+            </StackPanel>
+        </StackPanel>
+        <local:ControlPanel Grid.Column="1"/>
+
+        <!-- Services table -->
+        <DataGrid IsReadOnly="True" 
+                  Name="_servicesDataGrid" 
+                  Grid.Row="1" 
+                  Grid.ColumnSpan="2">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding ServiceName}" Width="2*" Header="Name"/>
+                <DataGridTextColumn Binding ="{Binding ServiceStatus}" Width="*" Header="Status"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</Window>
