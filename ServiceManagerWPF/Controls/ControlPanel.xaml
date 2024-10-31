@@ -9,35 +9,39 @@
         <StackPanel Orientation="Horizontal">
             <Button Margin="10 0 0 0"
                     Width="40"
-                    Height="40">
+                    Height="40" Name="_startButton">
                 <StackPanel>
                     <Image Source="/Images/Start_Available.png"/>
                 </StackPanel>
             </Button>
             <Button Margin="10 0 0 0"
                     Width="40"
-                    Height="40">
+                    Height="40"
+                    Name="_stopButton">
                 <StackPanel>
                     <Image Source="/Images/Stop_Available.png"/>
                 </StackPanel>
             </Button>
             <Button Margin="10 0 0 0"
                     Width="40"
-                    Height="40">
+                    Height="40"
+                    Name="_pauseButton">
                 <StackPanel>
                     <Image Source="/Images/Pause_Available.png"/>
                 </StackPanel>
             </Button>
             <Button Margin="10 0 0 0"
                     Width="40"
-                    Height="40">
+                    Height="40"
+                    Name="_refreshButton">
                 <StackPanel>
                     <Image Source="/Images/Refresh_Available.png"/>
                 </StackPanel>
             </Button>
             <Button Margin="10 0 0 0"
                     Width="40"
-                    Height="40">
+                    Height="40"
+                    Name="_configButton">
                 <StackPanel>
                     <Image Source="/Images/Config_Available.png"/>
                 </StackPanel>

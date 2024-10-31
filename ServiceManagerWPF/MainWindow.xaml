@@ -27,7 +27,7 @@
                           Width ="200" Height="25"/>
             </StackPanel>
         </StackPanel>
-        <local:ControlPanel Grid.Column="1"/>
+        <local:ControlPanel Grid.Column="1" x:Name="_controlPanel"/>
 
         <!-- Services table -->
         <DataGrid IsReadOnly="True" 
