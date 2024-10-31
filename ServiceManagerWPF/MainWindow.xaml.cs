@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.ServiceProcess;
+using System.Text;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,7 +33,8 @@ namespace ServiceManagerWPF
         public void SetupEventHandlers()
         {
             _groupsComboBox.SelectionChanged += _groupsComboBox_SelectionChanged;
-            _controlPanel.StartClicked += (sender, args) => MessageBox.Show("Start");
+
+            _controlPanel.StartClicked += (sender, args) => ApplyCommandToSelectedServices(s => s.Start());
             _controlPanel.StopClicked += (sender, args) => MessageBox.Show("Stop");
             _controlPanel.PauseClicked += (sender, args) => MessageBox.Show("Pause");
             _controlPanel.RefreshClicked += (sender, args) => MessageBox.Show("Refresh");
@@ -51,9 +53,9 @@ namespace ServiceManagerWPF
             _groupsComboBox.SelectedIndex = 0;
 
             // Put service info
-            foreach(var s in Services)
+            for(int i = 0; i < Services.Count(); i++)
             {
-                _servicesDataGrid.Items.Add(ServiceToDataGridItem(s));
+                _servicesDataGrid.Items.Add(ServiceToDataGridItem(Services[i], i));
             }
         }
 
@@ -79,32 +81,74 @@ namespace ServiceManagerWPF
 
         private void _groupsComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var allSelected = _groupsComboBox.SelectedIndex == 0;
+            var selectedGroup = _groupsComboBox.SelectedValue.ToString();
 
-            Func<ServiceController, bool> filter = x => true; // Tale all by default
+            if (selectedGroup == null)
+                throw new Exception("Could not retrieve selected group value");
 
-            if (!allSelected)
+            var filteredIndices = new List<int>(); 
+
+            if(!Configs.Groups.ContainsKey(selectedGroup))
+            {   
+                // Select all
+                filteredIndices = Enumerable.Range(0, Services.Count()).ToList();
+            }
+            else
             {
-                var selectedGroup = _groupsComboBox.SelectedValue.ToString();
+                var servicesInGroup = Configs.Groups[selectedGroup];
 
-                if (selectedGroup == null)
-                    throw new Exception("Could not retrieve selected group value");
+                foreach(var serviceName in servicesInGroup)
+                {
+                    int i = Array.FindIndex(Services, 0, Services.Count(), x => x.DisplayName == serviceName);
 
-                filter = x => Configs.Groups[selectedGroup].Contains(x.DisplayName);
+                    if(i < 0)
+                    {
+                        // Service not exists ot not installed
+                        //TODO: List him as gray
+                    }
+                    else
+                    {
+                        filteredIndices.Add(i);
+                    }
+                }
             }
             
-            // TODO: Study usage of ItemsSource
             _servicesDataGrid.Items.Clear();
-            var filteredServices = Services.Where(filter); 
-            foreach (var s in filteredServices)
+
+            foreach(var i in filteredIndices)
             {
-                _servicesDataGrid.Items.Add(ServiceToDataGridItem(s));
+                _servicesDataGrid.Items.Add(ServiceToDataGridItem(Services[i], i));
             }
         }
 
-        private object ServiceToDataGridItem(ServiceController s)
+        public void ApplyCommandToSelectedServices(Action<ServiceController> command)
         {
-            return new { ServiceName = s.DisplayName, ServiceStatus = s.Status.ToString()};
+            var serviceIndices = GetSelectedServices();
+
+            foreach(var i in serviceIndices)
+            {
+                command(Services[i]);
+            }
+        }
+
+        private object ServiceToDataGridItem(ServiceController s, int index)
+        {
+            return new ServiceDTO{ServiceName = s.DisplayName, ServiceStatus = s.Status.ToString(), Index = index,};
+        }
+
+        private IList<int> GetSelectedServices()
+        {
+            var selectedServiceIndices = new List<int>();
+
+            foreach (var s in _servicesDataGrid.SelectedItems)
+            {
+                var serviceDTO = s as ServiceDTO;
+
+                if(serviceDTO != null)
+                    selectedServiceIndices.Add(serviceDTO.Index);
+            }
+
+            return selectedServiceIndices;
         }
     }
 }
