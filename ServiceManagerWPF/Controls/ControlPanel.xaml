@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="ServiceManagerWPF.ControlPanel"
+﻿<UserControl x:Class="ServiceManagerWPF.Controls.ControlPanel"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ServiceManagerWPF"
+             xmlns:local="clr-namespace:ServiceManagerWPF.Controls"
              mc:Ignorable="d">
     <Grid>
         <StackPanel Orientation="Horizontal">

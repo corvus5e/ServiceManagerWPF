@@ -1,5 +1,4 @@
-﻿
-namespace ServiceManagerWPF
+﻿namespace ServiceManagerWPF.Model
 {
     public class Configs
     {
