@@ -82,14 +82,20 @@ namespace ServiceManagerWPF.ViewModel
         {
             foreach (var s in SelectedServices.Cast<IService>())
             {
+                var desiredStatus = ServiceStatus.NotInstalled;
                 switch (command)
                 {
-                    case ServiceCommand.Start: s.Start(); break;
-                    case ServiceCommand.Stop: s.Stop(); break;
-                    case ServiceCommand.Pause: s.Pause(); break;
-                    case ServiceCommand.Refresh: s.Refresh(); break;
+                    case ServiceCommand.Start: s.Start(); desiredStatus = ServiceStatus.Running; break;
+                    case ServiceCommand.Stop: s.Stop(); desiredStatus = ServiceStatus.Stopped; break;
+                    case ServiceCommand.Pause: s.Pause();desiredStatus = ServiceStatus.Stopped; break;
+                    case ServiceCommand.Refresh: s.Refresh(); desiredStatus = s.Status; break;
+                    default:
+                        throw new Exception("Unknow service command");
                 }
+
+                s.WaitForStatus(desiredStatus);
                 RaisePropertyChanged(nameof(Services));
+
             }
         }
 

@@ -24,6 +24,7 @@ namespace ServiceManagerWPF.Model
         public void Stop();
         public void Pause();
         public void Refresh();
+        public void WaitForStatus(ServiceStatus desiredStatus);
     }
 
     public class Service : IService
@@ -58,6 +59,11 @@ namespace ServiceManagerWPF.Model
         {
             _nativeService.Refresh();
         }
+
+        public void WaitForStatus(ServiceStatus desiredStatus)
+        {
+            _nativeService.WaitForStatus((ServiceControllerStatus)desiredStatus);
+        }
     }
 
     public class NonExistentService : IService
@@ -84,6 +90,8 @@ namespace ServiceManagerWPF.Model
         public void Pause()
         { }
         public void Refresh()
+        { }
+        public void WaitForStatus(ServiceStatus desiredStatus)
         { }
     }
 }

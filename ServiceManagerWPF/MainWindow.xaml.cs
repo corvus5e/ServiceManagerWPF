@@ -52,6 +52,7 @@ namespace ServiceManagerWPF
 
             filteredView.Refresh();
         }
+
         private void _servicesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             _viewModel.SelectedServices = _servicesDataGrid.SelectedItems;
