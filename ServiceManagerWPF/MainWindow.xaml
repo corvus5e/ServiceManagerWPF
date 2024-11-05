@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 
         xmlns:controls="clr-namespace:ServiceManagerWPF.Controls"
-        xmlns:view="clr-namespace:ServiceManagerWPF.View"
         mc:Ignorable="d"
         FontFamily="Verdana"
         FontSize="16"
@@ -28,8 +27,17 @@
             <controls:ControlPanel x:Name="_controlPanel"/>
         </StackPanel>
 
-        <view:ServicesTableView x:Name="_serviceTable"
-                                Grid.Row="1"
-                                Grid.ColumnSpan="2"/>
+        <DataGrid Grid.Row="1"
+                  Grid.ColumnSpan="2"
+                  IsReadOnly="True" 
+                  Name="_servicesDataGrid" 
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Services}"
+                  SelectionChanged="_servicesDataGrid_SelectionChanged">
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding DisplayName}" Width="2*" Header="Name"/>
+                <DataGridTextColumn Binding ="{Binding Status}" Width="*" Header="Status"/>
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 </Window>

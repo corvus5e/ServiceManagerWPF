@@ -10,7 +10,8 @@
            <Label Name="_titleLabel"/>
            <ComboBox Name="_comboBox"
                      Width ="200" Height="25"
-                     ItemsSource="{Binding Groups.Keys}"/> <!--TODO: Binding for now works only fron this place-->
+                     ItemsSource="{Binding Groups.Keys}"
+                     SelectedValue="{Binding SelectedGroup, Mode=TwoWay}"/> <!--TODO: Binding for now works only from this place-->
         </StackPanel>           
     </Grid>
 </UserControl>

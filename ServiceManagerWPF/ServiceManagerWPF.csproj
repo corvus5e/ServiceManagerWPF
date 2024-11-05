@@ -38,4 +38,8 @@
     <Resource Include="Images\Stop_Non_Available.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="View\" />
+  </ItemGroup>
+
 </Project>

@@ -1,8 +1,6 @@
 ﻿using ServiceManagerWPF.Data;
-using ServiceManagerWPF.Model; //TODO: Remove this reference
 using ServiceManagerWPF.ViewModel;
-using System.IO;
-using System.Text.Json;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -31,13 +29,13 @@ namespace ServiceManagerWPF
 
         public void SetupEventHandlers()
         {
-
-            _controlPanel.StartClicked += (sender, args) => ApplyCommandToSelectedServices(s => s.Start());
-            _controlPanel.StopClicked += (sender, args) => ApplyCommandToSelectedServices(s => s.Stop());
-            _controlPanel.PauseClicked += (sender, args) => ApplyCommandToSelectedServices(s => s.Pause());
-            _controlPanel.RefreshClicked += (sender, args) => ApplyCommandToSelectedServices(s => s.Refresh());
+            _controlPanel.StartClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Start);
+            _controlPanel.StopClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Stop);
+            _controlPanel.PauseClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Pause);
+            _controlPanel.RefreshClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Refresh);
             _controlPanel.ConfigClicked += (sender, args) => MessageBox.Show("Config");
             _groupsBox.SelectionChanged += GroupSelected;
+            _viewModel.PropertyChanged += (s, a) => (_servicesDataGrid.ItemsSource as ICollectionView)?.Refresh();
         }
 
         /*public void SaveConfigs(Configs configs, string fullPath)
@@ -48,21 +46,15 @@ namespace ServiceManagerWPF
 
         public void GroupSelected(object sender, SelectionChangedEventArgs e)
         {
-            var selectedGroup = _groupsBox.SelectedItem.ToString();
+            var filteredView = _viewModel.GetFilteredCollectionView(_viewModel.SelectedGroup);
 
-            var filteredView = _viewModel.GetFilteredCollectionView(selectedGroup);
+            _servicesDataGrid.ItemsSource = filteredView;
 
-            _serviceTable.FilterView(filteredView);
+            filteredView.Refresh();
         }
-
-        public void ApplyCommandToSelectedServices(Action<IService> command)
+        private void _servicesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            /*var serviceNames = GetSelectedServices();
-
-            foreach(var n in serviceNames)
-            {
-                command(_viewModel.Services.Where(x => x.Name == n).Select(x => x).First());
-            }*/
+            _viewModel.SelectedServices = _servicesDataGrid.SelectedItems;
         }
     }
 }
