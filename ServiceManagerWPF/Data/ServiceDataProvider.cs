@@ -15,14 +15,17 @@ namespace ServiceManagerWPF.Data
     {
         public async Task<ServiceCollection> GetServicesAsync() //TODO: The same as with Configs. Look at the same methon in the ConfigDataProvider class
         {
-            var services = new ServiceCollection();
-            var nativeServices = ServiceController.GetServices();
-            foreach (var s in nativeServices)
+            return await Task.Run(() =>
             {
-                services.Add(new Service(s));
-            }
+                var services = new ServiceCollection();
+                var nativeServices = ServiceController.GetServices();
+                foreach (var s in nativeServices)
+                {
+                    services.Add(new Service(s));
+                }
 
-            return services;
+                return services;
+            });
         }
     }
 }

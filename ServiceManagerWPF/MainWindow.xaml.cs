@@ -22,20 +22,26 @@ namespace ServiceManagerWPF
 
             DataContext = _viewModel;
 
-            Loaded += (s, a) => _viewModel.LoadAsync(); 
+            Loaded += async (s, a) => await _viewModel.LoadAsync();
 
             SetupEventHandlers();
         }
 
         public void SetupEventHandlers()
         {
-            _controlPanel.StartClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Start);
-            _controlPanel.StopClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Stop);
-            _controlPanel.PauseClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Pause);
-            _controlPanel.RefreshClicked += (sender, args) => _viewModel.ApplyCommandToSelectedServices(ServiceCommand.Refresh);
+            _controlPanel.StartClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Start);
+            _controlPanel.StopClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Stop);
+            _controlPanel.PauseClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Pause);
+            _controlPanel.RefreshClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Refresh);
             _controlPanel.ConfigClicked += (sender, args) => MessageBox.Show("Config");
             _groupsBox.SelectionChanged += GroupSelected;
-            _viewModel.PropertyChanged += (s, a) => (_servicesDataGrid.ItemsSource as ICollectionView)?.Refresh();
+            _viewModel.PropertyChanged += (s, a) => {
+                /*When this handler is invoked from another thread, need to use Dispatcher*/
+                this.Dispatcher.Invoke(() => {
+                     var foo = (_servicesDataGrid.ItemsSource as ICollectionView);
+                     foo?.Refresh();
+                });
+            };
         }
 
         /*public void SaveConfigs(Configs configs, string fullPath)
@@ -46,11 +52,9 @@ namespace ServiceManagerWPF
 
         public void GroupSelected(object sender, SelectionChangedEventArgs e)
         {
-            var filteredView = _viewModel.GetFilteredCollectionView(_viewModel.SelectedGroup);
-
-            _servicesDataGrid.ItemsSource = filteredView;
-
-            filteredView.Refresh();
+            var view = _viewModel.GetFilteredCollectionView(_viewModel.SelectedGroup);
+            _servicesDataGrid.ItemsSource = view;
+            view.Refresh();
         }
 
         private void _servicesDataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)

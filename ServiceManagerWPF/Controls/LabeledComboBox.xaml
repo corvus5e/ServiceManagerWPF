@@ -8,10 +8,12 @@
     <Grid>
         <StackPanel Margin="10 0 10 10">
            <Label Name="_titleLabel"/>
+           <!--TODO: Binding for now works only from this place-->
            <ComboBox Name="_comboBox"
                      Width ="200" Height="25"
                      ItemsSource="{Binding Groups.Keys}"
-                     SelectedValue="{Binding SelectedGroup, Mode=TwoWay}"/> <!--TODO: Binding for now works only from this place-->
+                     SelectedValue="{Binding SelectedGroup, Mode=TwoWay}"
+                     /> 
         </StackPanel>           
     </Grid>
 </UserControl>
