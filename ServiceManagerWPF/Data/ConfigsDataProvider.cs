@@ -7,6 +7,10 @@ namespace ServiceManagerWPF.Data
     public interface IConfigDataProvider
     {
         Task<Configs> GetConfigsAsync();
+
+        Task SaveConfigAsync(Configs c);
+
+        bool IsResourceAccessible();
     }
 
     public class JsonConfigsDataProvider : IConfigDataProvider
@@ -24,6 +28,17 @@ namespace ServiceManagerWPF.Data
                 Configs configs = JsonSerializer.Deserialize<Configs>(jsonString)!;
                 return configs;
             });
+        }
+        public async Task SaveConfigAsync(Configs config)
+        {
+            await Task.Run(() => {
+                using FileStream createStream = File.Create(_configFileFullPath);
+                JsonSerializer.Serialize(createStream, config, new JsonSerializerOptions { WriteIndented = true });
+            });
+        }
+        public bool IsResourceAccessible()
+        {
+            return File.Exists(_configFileFullPath);
         }
 
         public JsonConfigsDataProvider(string jsonConfigFileFullPath)

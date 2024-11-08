@@ -10,7 +10,6 @@
         FontSize="16"
         Title="Tiny Service Manager" Height="450" Width="800"
         Icon="Images/gear.ico">
-
  
     <Grid>
         <Grid.RowDefinitions>

@@ -1,10 +1,9 @@
 ﻿using ServiceManagerWPF.Data;
 using ServiceManagerWPF.Model;
 using System.Collections;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using System.Windows;
 using System.Windows.Data;
 
 namespace ServiceManagerWPF.ViewModel
@@ -45,7 +44,7 @@ namespace ServiceManagerWPF.ViewModel
                 RaisePropertyChanged(nameof(Groups));
             }
         }
-    
+
         public string? SelectedGroup { get; set; }
 
         public IList? SelectedServices { get; set; }
@@ -58,7 +57,17 @@ namespace ServiceManagerWPF.ViewModel
 
         public async Task LoadAsync()
         {
-            _configs = await _configDataProvider.GetConfigsAsync();
+            if (!_configDataProvider.IsResourceAccessible())
+            {
+                // Write default configs
+                _configs = new Configs();
+                await _configDataProvider.SaveConfigAsync(_configs);
+            }
+            else
+            {
+                _configs = await _configDataProvider.GetConfigsAsync();
+            }
+
             _configs.Groups.Add(DefaultGroup, new List<string>());
 
             SelectedGroup = DefaultGroup;
@@ -90,7 +99,7 @@ namespace ServiceManagerWPF.ViewModel
         {
             await Task.Run(() =>
             {
-#if DEBUG
+#if RELEASE 
                 try
                 {
 #endif
@@ -113,7 +122,7 @@ namespace ServiceManagerWPF.ViewModel
                         s.WaitForStatus(desiredStatus);
                         RaisePropertyChanged(nameof(Services));
                     }
-#if DEBUG
+#if RELEASE
                 }
                 catch(InvalidOperationException e)
                 {
@@ -121,6 +130,20 @@ namespace ServiceManagerWPF.ViewModel
                 }
 #endif
             });
+        }
+
+        public async Task OpenConfigFileViaDefaultAppAsync(string fullPath)
+        {
+            await Task.Run(() =>
+            {
+                //TODO: Get the default app for a json file format
+                //      For now use notepad
+                using Process myProcess = new Process();
+                myProcess.StartInfo.FileName = "notepad.exe";
+                myProcess.StartInfo.Arguments = fullPath;
+                myProcess.Start();
+            });
+
         }
 
         protected virtual void RaisePropertyChanged([CallerMemberName] string? propertyName = null)

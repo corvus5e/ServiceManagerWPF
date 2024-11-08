@@ -12,13 +12,15 @@ namespace ServiceManagerWPF
     public partial class MainWindow : Window
     {
         private ServicesViewModel _viewModel;
+        private string _configFile = string.Empty;
 
         public MainWindow()
         {
             InitializeComponent();
 
+            _configFile = JsonConfigsDataProvider.DefaultConfigFilePath;
             _viewModel = new ServicesViewModel(new WindowsLocalServiceDataProvider(),
-                new JsonConfigsDataProvider(JsonConfigsDataProvider.DefaultConfigFilePath));
+                new JsonConfigsDataProvider(_configFile));
 
             DataContext = _viewModel;
 
@@ -33,7 +35,7 @@ namespace ServiceManagerWPF
             _controlPanel.StopClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Stop);
             _controlPanel.PauseClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Pause);
             _controlPanel.RefreshClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Refresh);
-            _controlPanel.ConfigClicked += (sender, args) => MessageBox.Show("Config");
+            _controlPanel.ConfigClicked += async (sender, args) => await _viewModel.OpenConfigFileViaDefaultAppAsync(_configFile);
             _groupsBox.SelectionChanged += GroupSelected;
             _viewModel.PropertyChanged += (s, a) => {
                 /*When this handler is invoked from another thread, need to use Dispatcher*/
@@ -43,13 +45,6 @@ namespace ServiceManagerWPF
                 });
             };
         }
-
-        /*public void SaveConfigs(Configs configs, string fullPath)
-        {
-            using FileStream createStream = File.Create(fullPath);
-            JsonSerializer.Serialize(createStream, configs);
-        }*/
-
         public void GroupSelected(object sender, SelectionChangedEventArgs e)
         {
             var view = _viewModel.GetFilteredCollectionView(_viewModel.SelectedGroup);
