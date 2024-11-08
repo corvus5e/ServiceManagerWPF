@@ -6,11 +6,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\gear.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Images\Config_Available.png" />
     <None Remove="Images\Config_Non_Available.png" />
+    <None Remove="Images\gear.ico" />
     <None Remove="Images\Pause_Available.png" />
     <None Remove="Images\Pause_Non_Available.png" />
     <None Remove="Images\Refresh_Available.png" />
@@ -28,6 +30,7 @@
   <ItemGroup>
     <Resource Include="Images\Config_Available.png" />
     <Resource Include="Images\Config_Non_Available.png" />
+    <Resource Include="Images\gear.ico" />
     <Resource Include="Images\Pause_Available.png" />
     <Resource Include="Images\Pause_Non_Available.png" />
     <Resource Include="Images\Refresh_Available.png" />
