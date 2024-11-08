@@ -3,6 +3,7 @@ using ServiceManagerWPF.ViewModel;
 using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace ServiceManagerWPF
 {
@@ -34,7 +35,7 @@ namespace ServiceManagerWPF
             _controlPanel.StartClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Start);
             _controlPanel.StopClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Stop);
             _controlPanel.PauseClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Pause);
-            _controlPanel.RefreshClicked += async (sender, args) => await _viewModel.ApplyCommandToSelectedServicesAsync(ServiceCommand.Refresh);
+            _controlPanel.RefreshClicked += async (sender, args) => await _viewModel.Refresh();
             _controlPanel.ConfigClicked += async (sender, args) => await _viewModel.OpenConfigFileViaDefaultAppAsync(_configFile);
             _groupsBox.SelectionChanged += GroupSelected;
             _viewModel.PropertyChanged += (s, a) => {

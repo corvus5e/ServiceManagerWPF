@@ -4,6 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Data;
 
 namespace ServiceManagerWPF.ViewModel
@@ -74,7 +75,6 @@ namespace ServiceManagerWPF.ViewModel
             Groups = _configs.Groups;
             Services = await _servicesDataProvider.GetServicesAsync();
 
-
             RaisePropertyChanged($"{nameof(SelectedGroup)}");
         }
 
@@ -130,6 +130,18 @@ namespace ServiceManagerWPF.ViewModel
                 }
 #endif
             });
+        }
+
+        public async Task Refresh()
+        {
+            if(SelectedServices != null && SelectedServices.Count > 0)
+            {
+                await ApplyCommandToSelectedServicesAsync(ServiceCommand.Refresh);
+            }
+            else
+            {
+                await LoadAsync();
+            }
         }
 
         public async Task OpenConfigFileViaDefaultAppAsync(string fullPath)

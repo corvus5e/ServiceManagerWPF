@@ -10,7 +10,7 @@
         FontSize="16"
         Title="Tiny Service Manager" Height="450" Width="800"
         Icon="Images/gear.ico">
- 
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="70"/>
@@ -22,7 +22,10 @@
             <ColumnDefinition Width="2.5*"/>
         </Grid.ColumnDefinitions>
         
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan ="2">
+        <StackPanel Orientation="Horizontal"
+                    Grid.Row="0"
+                    Grid.ColumnSpan ="2"
+                    Background="{Binding BackgoundColor}">
             <controls:LabeledComboBox x:Name="_groupsBox" Title="Groups:" ItemsSource="{Binding Groups}"/>
             <controls:ControlPanel x:Name="_controlPanel"/>
         </StackPanel>
